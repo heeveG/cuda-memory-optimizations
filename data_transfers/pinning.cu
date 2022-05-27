@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "pinning.cuh"
 
 void copyProfiler(float *h_a, float *h_b, float *d, unsigned int n) {

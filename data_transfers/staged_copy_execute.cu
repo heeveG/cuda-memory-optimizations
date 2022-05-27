@@ -3,7 +3,6 @@
 //
 
 #include "staged_copy_execute.cuh"
-#include "../include/util.h"
 
 __global__ void kernel(float *a, int streamOffset) {
     int i = threadIdx.x + blockIdx.x * blockDim.x + streamOffset;

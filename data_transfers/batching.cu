@@ -3,7 +3,6 @@
 //
 
 #include "batching.cuh"
-#include "../include/util.h"
 #include <functional>
 
 void copyProfiler(const std::function<void()> &copyLambdaH2D, const std::function<void()> &copyLambdaD2H) {
@@ -34,7 +33,7 @@ void copyProfiler(const std::function<void()> &copyLambdaH2D, const std::functio
 }
 
 void measureBatching() {
-    int numElements = 16 * 1024 * 1024;
+    int numElements = 1024 * 1024;
     const unsigned int bytes = numElements * sizeof(float);
     float *h_a, *h_b, *h_c, *h_d, *h_batched, *d_a, *d_b, *d_c, *d_d, *d_batched;
 
@@ -68,7 +67,7 @@ void measureBatching() {
                  }
     );
 
-    h_batched = (float *) malloc(4 * bytes);
+    check(cudaMallocHost((void **) &h_batched, 4 * bytes));
     check(cudaMalloc((void **) &d_batched, 4 * bytes));
 
     memcpy(h_batched + 0 * numElements, h_a, bytes);
@@ -89,7 +88,7 @@ void measureBatching() {
     free(h_b);
     free(h_c);
     free(h_d);
-    free(h_batched);
+    cudaFreeHost(h_batched);
     cudaFree(d_a);
     cudaFree(d_b);
     cudaFree(d_c);
